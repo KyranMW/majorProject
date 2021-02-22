@@ -54,21 +54,53 @@ class num {
     image(this.pic, this.x, this.y, this.width, this.height);
   }
   moveUp(){
-    if (nums.length > 1){ 
-      for (let i = 0; i <= nums.length - 1; i++){
-        for (let j = 0; j <= nums.length -1; j++){
-          if (nums[i].x === nums[j].x){
-            if (nums[i].y > nums[j].y){
-              newY += 50;
-            }
-          }
-          nums[i].y = newY;
-        }
+    for (let i = 0; i < nums.length-1; i++){
+      for (let j = 0; j < nums.length-1; j++){
+        nums[i].y -= nextUp(i,j);
       }
     }
-    else {
-      nums[0].y = 0;
-    }
+  //   if (nums.length > 1){ 
+  //     for (let i = 0; i <= nums.length - 1; i++){
+  //       for (let j = 0; j <= nums.length -1; j++){
+  //         if (nums[j].y > 150){
+  //           nums[j].y = 150;
+  //         }
+  //         if (nums[j].y < 0){
+  //           nums[j].y = 0;
+  //         }
+  //         if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
+  //           nums[j].y = nums[j].y + 50;
+  //         }
+  //         if (nums[i].x === nums[j].x){
+  //           if (nums[i].y > nums[j].y){
+  //             newY += 50;
+  //           }
+  //         }
+  //         nums[i].y = newY;
+  //       }
+  //     }
+  //   }
+  //   else {
+  //     nums[0].y = 0;
+  //   }
+  // }
+  // moveRight(){
+  //   if (nums.length > 1){ 
+  //     for (let i = 0; i <= nums.length - 1; i++){
+  //       for (let j = 0; j <= nums.length -1; j++){
+  //         if (nums[i].x === nums[j].x){
+  //           if (nums[i].y > nums[j].y){
+  //             newX += 50;
+  //           }
+  //         }
+  //         nums[i].x = newX;
+  //       }
+  //     }
+  //   }
+  //   else {
+  //     nums[0].x = 150;
+  //   }
+  // }
   }
 }
 
@@ -89,8 +121,39 @@ function drawArrows(){
 
 function keyPressed(){
   if (keyCode === 38){
-    n2 = new num(cellHeight, cellWidth);
-    nums.push(n2)
-    n2.moveUp();
+    for (let i = 0; i <= nums.length - 1; i++) {
+      nums[i].moveUp();
+    }
   }
+  let number = new num(cellHeight, cellWidth);
+  nums.push(number);
+}
+
+function nextUp(i,j){
+  let nextY = 0;
+  if (nums[i].y - 50 === nums[j].y){
+    nextY = 0;
+  }
+  else if (nums[i].y - 50 < 0){
+    nextY = 0;
+  }
+  if (nums[i].y - 100 === nums[j].y){
+    nextY = 50;
+  }
+  else if (nums[i].y - 100 < 0){
+    nextY = 50;
+  }
+  if (nums[i].y - 150 === nums[j].y){
+    nextY = 100;
+  }
+  else if (nums[i].y - 150 < 0){
+    nextY = 100;
+  }
+  if (nums[i].y - 200 === nums[j].y){
+    nextY = 150;
+  }
+  else if (nums[i].y - 200 < 0){
+    nextY = 150;
+  }
+  return nextY;
 }
