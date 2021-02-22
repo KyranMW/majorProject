@@ -25,8 +25,6 @@ function setup() {
   cols = 4;
   cellWidth = 50;
   cellHeight = 50;
-  
-
 }
 
 function draw() {
@@ -43,8 +41,8 @@ function draw() {
 class num {
   constructor(cellHeight, cellWidth){
     this.pic = n2;
-    this.x = Math.floor(random(0,3.9)) * cellWidth;
-    this.y = Math.floor(random(0,3.9))* cellHeight;
+    this.x = createX();
+    this.y = createY();
     this.dx = 0.5;
     this.dy = 0.5;
     this.width = cellWidth;
@@ -53,54 +51,29 @@ class num {
   display(){
     image(this.pic, this.x, this.y, this.width, this.height);
   }
-  moveUp(){
-    for (let i = 0; i < nums.length-1; i++){
-      for (let j = 0; j < nums.length-1; j++){
-        nums[i].y -= nextUp(i,j);
+  moveUp(i){
+    if (nums.length > 1){ 
+      for (let j = 0; j <= nums.length -1; j++){
+        if (nums[j].y > 150){
+          nums[j].y = 150;
+        }
+        if (nums[j].y < 0){
+          nums[j].y = 0;
+        }
+        if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
+          nums[j].y = nums[j].y + 50;
+        }
+        if (nums[i].x === nums[j].x){
+          if (nums[i].y > nums[j].y){
+            newY += 50;
+          }
+        }
+        nums[i].y = newY;
       }
     }
-  //   if (nums.length > 1){ 
-  //     for (let i = 0; i <= nums.length - 1; i++){
-  //       for (let j = 0; j <= nums.length -1; j++){
-  //         if (nums[j].y > 150){
-  //           nums[j].y = 150;
-  //         }
-  //         if (nums[j].y < 0){
-  //           nums[j].y = 0;
-  //         }
-  //         if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
-  //           nums[j].y = nums[j].y + 50;
-  //         }
-  //         if (nums[i].x === nums[j].x){
-  //           if (nums[i].y > nums[j].y){
-  //             newY += 50;
-  //           }
-  //         }
-  //         nums[i].y = newY;
-  //       }
-  //     }
-  //   }
-  //   else {
-  //     nums[0].y = 0;
-  //   }
-  // }
-  // moveRight(){
-  //   if (nums.length > 1){ 
-  //     for (let i = 0; i <= nums.length - 1; i++){
-  //       for (let j = 0; j <= nums.length -1; j++){
-  //         if (nums[i].x === nums[j].x){
-  //           if (nums[i].y > nums[j].y){
-  //             newX += 50;
-  //           }
-  //         }
-  //         nums[i].x = newX;
-  //       }
-  //     }
-  //   }
-  //   else {
-  //     nums[0].x = 150;
-  //   }
-  // }
+    else {
+      nums[0].y = 0;
+    }
   }
 }
 
@@ -122,7 +95,7 @@ function drawArrows(){
 function keyPressed(){
   if (keyCode === 38){
     for (let i = 0; i <= nums.length - 1; i++) {
-      nums[i].moveUp();
+      nums[i].moveUp(i);
     }
   }
   let number = new num(cellHeight, cellWidth);
@@ -156,4 +129,39 @@ function nextUp(i,j){
     nextY = 150;
   }
   return nextY;
+}
+
+function createX(){
+  let x = Math.floor(random(0,3.9)) * cellWidth;
+  for (let i = 0; i < nums.length - 1; i++){
+    if (x === nums[i].x){
+      x = Math.floor(random(0,3.9)) * cellWidth;
+    }
+    checkAgain(x,i,"x");
+  }
+  return x;
+}
+
+function createY(){
+  let y = Math.floor(random(0,3.9)) * cellHeight;
+  for (let i = 0; i < nums.length - 1; i++){
+    if (y === nums[i].y){
+      y = Math.floor(random(0,3.9)) * cellHeight;
+    }
+    checkAgain(y,i,"y");
+  }
+  return y;
+}
+
+function checkAgain(n,i,p){
+  if (p === "y"){
+    if (n === nums[i].y){
+      createY();
+    }
+  }
+  else{
+    if (n === nums[i].x){
+      createX();
+    }
+  }
 }
