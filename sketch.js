@@ -54,22 +54,32 @@ class num {
   moveUp(i){
     if (nums.length > 1){ 
       for (let j = 0; j <= nums.length -1; j++){
-        if (nums[j].y > 150){
-          nums[j].y = 150;
-        }
-        if (nums[j].y < 0){
-          nums[j].y = 0;
-        }
-        if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
-          nums[j].y = nums[j].y + 50;
-        }
-        if (nums[i].x === nums[j].x){
-          if (nums[i].y > nums[j].y){
-            newY += 50;
+        if (nums[j] !== nums[i]){
+          if (nums[i].y !== 0){
+            if (nums[i].y > 150){
+              nums[i].y = 150;
+            }
+            if (nums[i].y < 0){
+              nums[i].y = 0;
+            }
+            if (nums[i].y - 50 < 0){
+              nums[i].y = 50;
+            }
+            if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
+              nums[i].y = nums[i].y + 50;
+            }
+            if (nums[i].x === nums[j].x){
+              if (nums[j].y - 50 < nums[i].y){
+                newY -= 50;
+              }
+              else{
+                newY = 0;
+              }
+            }
           }
         }
-        nums[i].y = newY;
       }
+      nums[i].y += newY;
     }
     else {
       nums[0].y = 0;
@@ -100,35 +110,6 @@ function keyPressed(){
   }
   let number = new num(cellHeight, cellWidth);
   nums.push(number);
-}
-
-function nextUp(i,j){
-  let nextY = 0;
-  if (nums[i].y - 50 === nums[j].y){
-    nextY = 0;
-  }
-  else if (nums[i].y - 50 < 0){
-    nextY = 0;
-  }
-  if (nums[i].y - 100 === nums[j].y){
-    nextY = 50;
-  }
-  else if (nums[i].y - 100 < 0){
-    nextY = 50;
-  }
-  if (nums[i].y - 150 === nums[j].y){
-    nextY = 100;
-  }
-  else if (nums[i].y - 150 < 0){
-    nextY = 100;
-  }
-  if (nums[i].y - 200 === nums[j].y){
-    nextY = 150;
-  }
-  else if (nums[i].y - 200 < 0){
-    nextY = 150;
-  }
-  return nextY;
 }
 
 function createX(){
