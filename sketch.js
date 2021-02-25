@@ -1,167 +1,192 @@
-// 2048
+// arrow grid game
 // Kyran Mcknight-Woods
-// February 2nd, 2021
+// CompSci 30
+// 2D Grid project
+// inspiration from Lock Puzzle
 
-let rows;
-let cols;
-let cellWidth;
-let cellHeight;
-let gridPattern, rightArrow, downArrow, leftArrow, upArrow, n2;
-let nums = [];
-let newY = 0;
+// determines how many spaces between the clicked arrow and the next arrow
+let spaces = 
+ [[1,2,1,2,3,3],
+   [2,1,2,2,1,2],
+   [2,4,1,3,2,1],
+   [2,1,3,2,2,1],
+   [2,3,1,3,2,1],
+   [5,3,1,1,4,2]];
 
-function preload(){
-  gridPattern = loadImage("assets/grid pattern.png");
-  rightArrow = loadImage("assets/right arrow.png");
-  leftArrow = loadImage("assets/left arrow.png");
-  upArrow = loadImage("assets/up arrow.png");
-  downArrow = loadImage("assets/down arrow.png");
-  n2 = loadImage("assets/2.png");
+// determines the direction the arrow should be facing
+// 1 = up, 2 = right, 3 = down, 4 = left
+let direction = 
+ [[2,3,2,2,3,3],
+   [3,2,4,3,4,4],
+   [1,2,2,4,4,1],
+   [3,3,1,4,4,3],
+   [2,1,3,4,1,4],
+   [2,2,4,1,1,4]];
+
+// determines the color of the arrow
+let theColor =
+[[0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0],
+  [0,0,0,0,0,0]];
+
+let rows, cols, cellWidth, cellHeight, arrow, p;
+
+let nextMoveX = 0;
+let nextMoveY = 0;
+
+let singleArrowUp,singleArrowRight,singleArrowLeft,singleArrowDown;
+let doubleArrowUp,doubleArrowRight,doubleArrowLeft,doubleArrowDown;
+let tripleArrowUp,tripleArrowRight,tripleArrowLeft,tripleArrowDown;
+let quadArrowUp,quadArrowRight,quadArrowLeft,quadArrowDown;
+let quintArrowUp,quintArrowRight,quintArrowLeft,quintArrowDown;
+
+let click;
+
+function preload() {
+  singleArrowUp = loadImage("assets/1 space arrow up.png");
+  singleArrowDown = loadImage("assets/1 space arrow down.png");
+  singleArrowRight = loadImage("assets/1 space arrow right.png");
+  singleArrowLeft = loadImage("assets/1 space arrow left.png");
+  doubleArrowUp = loadImage("assets/2 space arrow up.png");
+  doubleArrowRight = loadImage("assets/2 space arrow right.png");
+  doubleArrowLeft = loadImage("assets/2 space arrow left.png");
+  doubleArrowDown = loadImage("assets/2 space arrow down.png");
+  tripleArrowUp = loadImage("assets/3 space arrow up.png");
+  tripleArrowDown = loadImage("assets/3 space arrow down.png");
+  tripleArrowRight = loadImage("assets/3 space arrow right.png");
+  tripleArrowLeft = loadImage("assets/3 space arrow left.png");
+  quadArrowUp = loadImage("assets/4 space arrow up.png");
+  quadArrowDown = loadImage("assets/4 space arrow down.png");
+  quadArrowRight = loadImage("assets/4 space arrow right.png");
+  quadArrowLeft = loadImage("assets/4 space arrow left.png");
+  quintArrowUp = loadImage("assets/5 space arrow up.png");
+  quintArrowDown = loadImage("assets/5 space arrow down.png");
+  quintArrowRight = loadImage("assets/5 space arrow right.png");
+  quintArrowLeft = loadImage("assets/5 space arrow left.png");
+  click = loadSound("assets/Click.wav");
 }
 
 function setup() {
-  createCanvas(windowWidth, windowHeight);
-  rows = 4;
-  cols = 4;
-  cellWidth = 50;
-  cellHeight = 50;
+  createCanvas(600, 600);
+  rows = spaces.length;
+  cols = spaces[0].length;
+  cellWidth = width/cols;
+  cellHeight = height/rows;
 }
 
 function draw() {
+  angleMode(DEGREES);
   background(220);
-  translate(width/2 - 100, height/2 - 100);
-  rect(-1,0,201,201);
-  drawGrid(cols, rows);
-  drawArrows();
-  for (let i = 0; i <= nums.length - 1; i++) {
-    nums[i].display();
-  }
+  displaySpaces();
 }
 
-class num {
-  constructor(cellHeight, cellWidth){
-    this.pic = n2;
-    this.x = createX();
-    this.y = createY();
-    this.dx = 0.5;
-    this.dy = 0.5;
-    this.width = cellWidth;
-    this.height = cellHeight;
-  }
-  display(){
-    image(this.pic, this.x, this.y, this.width, this.height);
-  }
-  moveUp(i){
-    if (nums.length > 1){ 
-      for (let j = 0; j <= nums.length -1; j++){
-        if (nums[j].y > 150){
-          nums[j].y = 150;
-        }
-        if (nums[j].y < 0){
-          nums[j].y = 0;
-        }
-        if (nums[j].y === nums[i].y && nums[j].x === nums[i].x){
-          nums[j].y = nums[j].y + 50;
-        }
-        if (nums[i].x === nums[j].x){
-          if (nums[i].y > nums[j].y){
-            newY += 50;
-          }
-        }
-        nums[i].y = newY;
+function displaySpaces(){
+  for (let y = 0; y < rows; y++){
+    for (let x = 0; x < cols; x++){
+      if (spaces[y][x] === 1 && direction[y][x] === 1){
+        arrow = singleArrowUp;
       }
-    }
-    else {
-      nums[0].y = 0;
+      else if (spaces[y][x] === 1 && direction[y][x] === 2){
+        arrow = singleArrowRight;
+      }
+      else if (spaces[y][x] === 1 && direction[y][x] === 3){
+        arrow = singleArrowDown;
+      }
+      else if (spaces[y][x] === 1 && direction[y][x] === 4){
+        arrow = singleArrowLeft;
+      }
+      else if (spaces[y][x] === 2 && direction[y][x] === 1){
+        arrow = doubleArrowUp;
+      }
+      else if (spaces[y][x] === 2 && direction[y][x] === 2){
+        arrow = doubleArrowRight;
+      }
+      else if (spaces[y][x] === 2 && direction[y][x] === 3){
+        arrow = doubleArrowDown;
+      }
+      else if (spaces[y][x] === 2 && direction[y][x] === 4){
+        arrow = doubleArrowLeft;
+      }
+      else if (spaces[y][x] === 3 && direction[y][x] === 1){
+        arrow = tripleArrowUp;
+      }
+      else if (spaces[y][x] === 3 && direction[y][x] === 2){
+        arrow = tripleArrowRight;
+      }
+      else if (spaces[y][x] === 3 && direction[y][x] === 3){
+        arrow = tripleArrowDown;
+      }
+      else if (spaces[y][x] === 3 && direction[y][x] === 4){
+        arrow = tripleArrowLeft;
+      }
+      else if (spaces[y][x] === 4 && direction[y][x] === 1){
+        arrow = quadArrowUp;
+      }
+      else if (spaces[y][x] === 4 && direction[y][x] === 2){
+        arrow = quadArrowRight;
+      }
+      else if (spaces[y][x] === 4 && direction[y][x] === 3){
+        arrow = quadArrowDown;
+      }
+      else if (spaces[y][x] === 4 && direction[y][x] === 4){
+        arrow = quadArrowLeft;
+      }
+      else if (spaces[y][x] === 5 && direction[y][x] === 1){
+        arrow = quintArrowUp;
+      }
+      else if (spaces[y][x] === 5 && direction[y][x] === 2){
+        arrow = quintArrowRight;
+      }
+      else if (spaces[y][x] === 5 && direction[y][x] === 3){
+        arrow = quintArrowDown;
+      }
+      else if (spaces[y][x] === 5 && direction[y][x] === 4){
+        arrow = quintArrowLeft;
+      }
+      if (theColor[y][x] === 0){
+        tint("white");
+      }
+      else if (theColor[y][x] === 1){
+        tint("red");
+      }
+      image(arrow, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
   }
 }
 
-function drawGrid(cols, rows){
-  for (let y=0; y<rows; y++) {
-    for (let x=0; x<cols; x++) {
-      image(gridPattern, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
+function mousePressed() {
+  click.play();
+  let x = Math.floor(mouseX / cellWidth);
+  let y = Math.floor(mouseY / cellHeight);
+  if (nextMoveX === 0 && nextMoveY === 0){
+    nextMoveX = x;
+    nextMoveY = y;
+  }
+  if (x === nextMoveX && y === nextMoveY){
+    if (theColor[y][x] === 0) {
+      theColor[y][x] = 1;
     }
+    nextStep(x,y);
   }
 }
 
-function drawArrows(){
-  image(upArrow, 75, 210, cellWidth, cellHeight);
-  image(downArrow, 75, 260, cellWidth, cellHeight);
-  image(rightArrow, 125, 260, cellWidth, cellHeight);
-  image(leftArrow, 25, 260, cellWidth, cellHeight);
-}
-
-function keyPressed(){
-  if (keyCode === 38){
-    for (let i = 0; i <= nums.length - 1; i++) {
-      nums[i].moveUp(i);
-    }
+// determines next move
+function nextStep(x, y){
+  if (direction[y][x] === 1){
+    y -= spaces[y][x];
   }
-  let number = new num(cellHeight, cellWidth);
-  nums.push(number);
-}
-
-function nextUp(i,j){
-  let nextY = 0;
-  if (nums[i].y - 50 === nums[j].y){
-    nextY = 0;
+  else if (direction[y][x] === 2){
+    x += spaces[y][x];
   }
-  else if (nums[i].y - 50 < 0){
-    nextY = 0;
+  else if (direction[y][x] === 3){
+    y += spaces[y][x];
   }
-  if (nums[i].y - 100 === nums[j].y){
-    nextY = 50;
+  else if (direction[y][x] === 4){
+    x -= spaces[y][x];
   }
-  else if (nums[i].y - 100 < 0){
-    nextY = 50;
-  }
-  if (nums[i].y - 150 === nums[j].y){
-    nextY = 100;
-  }
-  else if (nums[i].y - 150 < 0){
-    nextY = 100;
-  }
-  if (nums[i].y - 200 === nums[j].y){
-    nextY = 150;
-  }
-  else if (nums[i].y - 200 < 0){
-    nextY = 150;
-  }
-  return nextY;
-}
-
-function createX(){
-  let x = Math.floor(random(0,3.9)) * cellWidth;
-  for (let i = 0; i < nums.length - 1; i++){
-    if (x === nums[i].x){
-      x = Math.floor(random(0,3.9)) * cellWidth;
-    }
-    checkAgain(x,i,"x");
-  }
-  return x;
-}
-
-function createY(){
-  let y = Math.floor(random(0,3.9)) * cellHeight;
-  for (let i = 0; i < nums.length - 1; i++){
-    if (y === nums[i].y){
-      y = Math.floor(random(0,3.9)) * cellHeight;
-    }
-    checkAgain(y,i,"y");
-  }
-  return y;
-}
-
-function checkAgain(n,i,p){
-  if (p === "y"){
-    if (n === nums[i].y){
-      createY();
-    }
-  }
-  else{
-    if (n === nums[i].x){
-      createX();
-    }
-  }
+  nextMoveX = x;
+  nextMoveY = y;
 }
