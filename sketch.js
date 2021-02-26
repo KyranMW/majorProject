@@ -78,13 +78,13 @@ function setup() {
 }
 
 function draw() {
-  angleMode(DEGREES);
   background(220);
   displaySpaces();
 }
 
 function displaySpaces(){
   for (let y = 0; y < rows; y++){
+    ml = millis();
     for (let x = 0; x < cols; x++){
       if (spaces[y][x] === 1){
         if (direction[y][x] === 1){
@@ -142,17 +142,19 @@ function displaySpaces(){
           arrow = quadArrowLeft;
         }
       }
-      else if (spaces[y][x] === 5 && direction[y][x] === 1){
-        arrow = quintArrowUp;
-      }
-      else if (spaces[y][x] === 5 && direction[y][x] === 2){
-        arrow = quintArrowRight;
-      }
-      else if (spaces[y][x] === 5 && direction[y][x] === 3){
-        arrow = quintArrowDown;
-      }
-      else if (spaces[y][x] === 5 && direction[y][x] === 4){
-        arrow = quintArrowLeft;
+      else if (spaces[y][x] === 5){
+        if (direction[y][x] === 1){
+          arrow = quintArrowUp;
+        }
+        else if (direction[y][x] === 2){
+          arrow = quintArrowRight;
+        }
+        else if (direction[y][x] === 3){
+          arrow = quintArrowDown;
+        }
+        else if (direction[y][x] === 4){
+          arrow = quintArrowLeft;
+        }
       }
       if (theColor[y][x] === 0){
         tint("white");
@@ -162,6 +164,7 @@ function displaySpaces(){
       }
       image(arrow, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
+    console.log(millis()-ml);
   }
 }
 
