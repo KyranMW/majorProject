@@ -84,7 +84,7 @@ function draw() {
 
 function displaySpaces(){
   for (let y = 0; y < rows; y++){
-    ml = millis();
+    let ml = millis();
     for (let x = 0; x < cols; x++){
       if (spaces[y][x] === 1){
         if (direction[y][x] === 1){
@@ -102,7 +102,7 @@ function displaySpaces(){
       }
       else if (spaces[y][x] === 2){
         if (direction[y][x] === 1){
-          arrow = doubleArrowUp
+          arrow = doubleArrowUp;
         }
         else if (direction[y][x] === 2){
           arrow = doubleArrowRight;
@@ -130,7 +130,7 @@ function displaySpaces(){
       }
       else if (spaces[y][x] === 4){
         if (direction[y][x] === 1){
-          arrow = quadArrowUp
+          arrow = quadArrowUp;
         }
         else if (direction[y][x] === 2){
           arrow = quadArrowRight;
