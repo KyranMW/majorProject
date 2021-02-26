@@ -86,53 +86,61 @@ function draw() {
 function displaySpaces(){
   for (let y = 0; y < rows; y++){
     for (let x = 0; x < cols; x++){
-      if (spaces[y][x] === 1 && direction[y][x] === 1){
-        arrow = singleArrowUp;
+      if (spaces[y][x] === 1){
+        if (direction[y][x] === 1){
+          arrow = singleArrowUp;
+        }
+        else if (direction[y][x] === 2){
+          arrow = singleArrowRight;
+        }
+        else if (direction[y][x] === 3){
+          arrow = singleArrowDown;
+        }
+        else if (direction[y][x] === 4){
+          arrow = singleArrowLeft;
+        }
       }
-      else if (spaces[y][x] === 1 && direction[y][x] === 2){
-        arrow = singleArrowRight;
+      else if (spaces[y][x] === 2){
+        if (direction[y][x] === 1){
+          arrow = doubleArrowUp
+        }
+        else if (direction[y][x] === 2){
+          arrow = doubleArrowRight;
+        }
+        else if (direction[y][x] === 3){
+          arrow = doubleArrowDown;
+        }
+        else if (direction[y][x] === 4){
+          arrow = doubleArrowLeft;
+        }
       }
-      else if (spaces[y][x] === 1 && direction[y][x] === 3){
-        arrow = singleArrowDown;
+      else if (spaces[y][x] === 3){
+        if (direction[y][x] === 1){
+          arrow = tripleArrowUp;
+        }
+        else if (direction[y][x] === 2){
+          arrow = tripleArrowRight;
+        }
+        else if (direction[y][x] === 3){
+          arrow = tripleArrowDown;
+        }
+        else if (direction[y][x] === 4){
+          arrow = tripleArrowLeft;
+        }
       }
-      else if (spaces[y][x] === 1 && direction[y][x] === 4){
-        arrow = singleArrowLeft;
-      }
-      else if (spaces[y][x] === 2 && direction[y][x] === 1){
-        arrow = doubleArrowUp;
-      }
-      else if (spaces[y][x] === 2 && direction[y][x] === 2){
-        arrow = doubleArrowRight;
-      }
-      else if (spaces[y][x] === 2 && direction[y][x] === 3){
-        arrow = doubleArrowDown;
-      }
-      else if (spaces[y][x] === 2 && direction[y][x] === 4){
-        arrow = doubleArrowLeft;
-      }
-      else if (spaces[y][x] === 3 && direction[y][x] === 1){
-        arrow = tripleArrowUp;
-      }
-      else if (spaces[y][x] === 3 && direction[y][x] === 2){
-        arrow = tripleArrowRight;
-      }
-      else if (spaces[y][x] === 3 && direction[y][x] === 3){
-        arrow = tripleArrowDown;
-      }
-      else if (spaces[y][x] === 3 && direction[y][x] === 4){
-        arrow = tripleArrowLeft;
-      }
-      else if (spaces[y][x] === 4 && direction[y][x] === 1){
-        arrow = quadArrowUp;
-      }
-      else if (spaces[y][x] === 4 && direction[y][x] === 2){
-        arrow = quadArrowRight;
-      }
-      else if (spaces[y][x] === 4 && direction[y][x] === 3){
-        arrow = quadArrowDown;
-      }
-      else if (spaces[y][x] === 4 && direction[y][x] === 4){
-        arrow = quadArrowLeft;
+      else if (spaces[y][x] === 4){
+        if (direction[y][x] === 1){
+          arrow = quadArrowUp
+        }
+        else if (direction[y][x] === 2){
+          arrow = quadArrowRight;
+        }
+        else if (direction[y][x] === 3){
+          arrow = quadArrowDown;
+        }
+        else if (direction[y][x] === 4){
+          arrow = quadArrowLeft;
+        }
       }
       else if (spaces[y][x] === 5 && direction[y][x] === 1){
         arrow = quintArrowUp;
