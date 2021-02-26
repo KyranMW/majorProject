@@ -70,21 +70,122 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(windowWidth, windowHeight);
   rows = spaces.length;
   cols = spaces[0].length;
-  cellWidth = width/cols;
-  cellHeight = height/rows;
+  if (windowWidth > windowHeight){
+    cellWidth =  height/cols;
+    cellHeight = height/rows;
+  }
+  else if (windowHeight > windowWidth){
+    cellWidth = height/cols;
+    cellHeight = height/rows;
+  }
+  displaySpaces();
+  //displayEasy();
+  //displayMedium();
+  displayHard();
 }
 
-function draw() {
-  background(220);
-  displaySpaces();
+function windowResized() {
+  if (windowWidth > windowHeight) {
+    resizeCanvas(windowHeight, windowHeight);
+  }
+  else if (windowWidth < windowHeight) {
+    resizeCanvas(windowWidth, windowWidth);
+  }
+  setup();
 }
+
+function displayHard(){
+  rect(rows*cellWidth + cellWidth, windowHeight/3, 100,50);
+}
+
+function displaySpace(x,y){
+  if (x >= 0 && x < rows && y >= 0 && y < cols){
+    if (spaces[y][x] === 1){
+      if (direction[y][x] === 1){
+        arrow = singleArrowUp;
+      }
+      else if (direction[y][x] === 2){
+        arrow = singleArrowRight;
+      }
+      else if (direction[y][x] === 3){
+        arrow = singleArrowDown;
+      }
+      else if (direction[y][x] === 4){
+        arrow = singleArrowLeft;
+      }
+    }
+    else if (spaces[y][x] === 2){
+      if (direction[y][x] === 1){
+        arrow = doubleArrowUp;
+      }
+      else if (direction[y][x] === 2){
+        arrow = doubleArrowRight;
+      }
+      else if (direction[y][x] === 3){
+        arrow = doubleArrowDown;
+      }
+      else if (direction[y][x] === 4){
+        arrow = doubleArrowLeft;
+      }
+    }
+    else if (spaces[y][x] === 3){
+      if (direction[y][x] === 1){
+        arrow = tripleArrowUp;
+      }
+      else if (direction[y][x] === 2){
+        arrow = tripleArrowRight;
+      }
+      else if (direction[y][x] === 3){
+        arrow = tripleArrowDown;
+      }
+      else if (direction[y][x] === 4){
+        arrow = tripleArrowLeft;
+      }
+    }
+    else if (spaces[y][x] === 4){
+      if (direction[y][x] === 1){
+        arrow = quadArrowUp;
+      }
+      else if (direction[y][x] === 2){
+        arrow = quadArrowRight;
+      }
+      else if (direction[y][x] === 3){
+        arrow = quadArrowDown;
+      }
+      else if (direction[y][x] === 4){
+        arrow = quadArrowLeft;
+      }
+    }
+    else if (spaces[y][x] === 5){
+      if (direction[y][x] === 1){
+        arrow = quintArrowUp;
+      }
+      else if (direction[y][x] === 2){
+        arrow = quintArrowRight;
+      }
+      else if (direction[y][x] === 3){
+        arrow = quintArrowDown;
+      }
+      else if (direction[y][x] === 4){
+        arrow = quintArrowLeft;
+      }
+    }
+    if (theColor[y][x] === 0){
+      tint("white");
+    }
+    else if (theColor[y][x] === 1){
+      tint("red");
+    }
+    image(arrow, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
+  }
+}
+
 
 function displaySpaces(){
   for (let y = 0; y < rows; y++){
-    let ml = millis();
     for (let x = 0; x < cols; x++){
       if (spaces[y][x] === 1){
         if (direction[y][x] === 1){
@@ -164,7 +265,6 @@ function displaySpaces(){
       }
       image(arrow, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
     }
-    console.log(millis()-ml);
   }
 }
 
@@ -182,6 +282,7 @@ function mousePressed() {
     }
     nextStep(x,y);
   }
+  displaySpace(x,y);
 }
 
 // determines next move
