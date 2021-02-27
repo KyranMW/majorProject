@@ -198,7 +198,7 @@ function displaySpace(x,y){
       tint("white");
     }
     else if (theColor[y][x] === 1){
-      tint("red");
+      tint(50);
     }
     image(arrow, x*cellWidth, y*cellHeight, cellWidth, cellHeight);
   }
