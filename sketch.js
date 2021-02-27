@@ -32,7 +32,7 @@ let theColor =
   [0,0,0,0,0,0],
   [0,0,0,0,0,0]];
 
-let rows, cols, cellWidth, cellHeight, arrow, p;
+let rows, cols, cellWidth, cellHeight, arrow;
 
 let nextMoveX = 0;
 let nextMoveY = 0;
@@ -42,8 +42,13 @@ let doubleArrowUp,doubleArrowRight,doubleArrowLeft,doubleArrowDown;
 let tripleArrowUp,tripleArrowRight,tripleArrowLeft,tripleArrowDown;
 let quadArrowUp,quadArrowRight,quadArrowLeft,quadArrowDown;
 let quintArrowUp,quintArrowRight,quintArrowLeft,quintArrowDown;
+let bg;
 
 let click;
+
+let mode = "hard";
+
+let firstMove = true;
 
 function preload() {
   singleArrowUp = loadImage("assets/1 space arrow up.png");
@@ -66,24 +71,29 @@ function preload() {
   quintArrowDown = loadImage("assets/5 space arrow down.png");
   quintArrowRight = loadImage("assets/5 space arrow right.png");
   quintArrowLeft = loadImage("assets/5 space arrow left.png");
+  bg = loadImage("assets/background.png");
   click = loadSound("assets/Click.wav");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  image(bg, 0, 0, width, height);
   rows = spaces.length;
   cols = spaces[0].length;
   if (windowWidth > windowHeight){
-    cellWidth =  height/cols;
-    cellHeight = height/rows;
+    cellWidth =  height/(cols + 2);
+    cellHeight = height/(rows + 2);
   }
   else if (windowHeight > windowWidth){
-    cellWidth = height/cols;
-    cellHeight = height/rows;
+    cellWidth = width/(cols + 2);
+    cellHeight = width/(rows + 2);
   }
+  translate(width/2 - cellWidth*((rows/2) + 2),height/2 - cellHeight*(cols/2));
+  noFill();
+  rect(0,0,cellWidth*rows, cellHeight*cols);
   displaySpaces();
-  //displayEasy();
-  //displayMedium();
+  displayEasy();
+  displayMedium();
   displayHard();
 }
 
@@ -98,7 +108,13 @@ function windowResized() {
 }
 
 function displayHard(){
-  rect(rows*cellWidth + cellWidth, windowHeight/3, 100,50);
+  rect(rows*cellWidth + cellWidth, height/4, cellWidth,cellHeight/2, 10);
+}
+function displayMedium(){
+  rect(rows*cellWidth + cellWidth, height/4 + cellHeight, cellWidth,cellHeight/2, 10);
+}
+function displayEasy(){
+  rect(rows*cellWidth + cellWidth, height/4 + cellHeight*2, cellWidth,cellHeight/2, 10);
 }
 
 function displaySpace(x,y){
@@ -271,18 +287,23 @@ function displaySpaces(){
 function mousePressed() {
   click.play();
   let x = Math.floor(mouseX / cellWidth);
-  let y = Math.floor(mouseY / cellHeight);
-  if (nextMoveX === 0 && nextMoveY === 0){
-    nextMoveX = x;
-    nextMoveY = y;
-  }
-  if (x === nextMoveX && y === nextMoveY){
-    if (theColor[y][x] === 0) {
-      theColor[y][x] = 1;
+  let y = (Math.floor(mouseY / cellHeight)) - 1;
+    if (x < cellWidth * rows && x >= 0 && y < cellHeight * cols && y >= 0){
+    console.log(x,y);
+    if (firstMove){
+      firstMove = false;
+      nextMoveX = x;
+      nextMoveY = y;
     }
-    nextStep(x,y);
+    if (x === nextMoveX && y === nextMoveY){
+      if (theColor[y][x] === 0) {
+        theColor[y][x] = 1;
+      }
+      nextStep(x,y);
+    }
+    displaySpace(x,y);
   }
-  displaySpace(x,y);
+  console.log(nextMoveX, nextMoveY);
 }
 
 // determines next move
