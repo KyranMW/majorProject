@@ -42,6 +42,7 @@ let doubleArrowUp,doubleArrowRight,doubleArrowLeft,doubleArrowDown;
 let tripleArrowUp,tripleArrowRight,tripleArrowLeft,tripleArrowDown;
 let quadArrowUp,quadArrowRight,quadArrowLeft,quadArrowDown;
 let quintArrowUp,quintArrowRight,quintArrowLeft,quintArrowDown;
+let easyButton, mediumButton, hardButton;
 let bg;
 
 let click;
@@ -71,12 +72,16 @@ function preload() {
   quintArrowDown = loadImage("assets/5 space arrow down.png");
   quintArrowRight = loadImage("assets/5 space arrow right.png");
   quintArrowLeft = loadImage("assets/5 space arrow left.png");
+  easyButton = loadImage("assets/easy.png");
+  mediumButton = loadImage("assets/medium.png");
+  hardButton = loadImage("assets/hard.png");
   bg = loadImage("assets/background.png");
   click = loadSound("assets/Click.wav");
 }
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
+  noTint();
   image(bg, 0, 0, width, height);
   rows = spaces.length;
   cols = spaces[0].length;
@@ -88,7 +93,7 @@ function setup() {
     cellWidth = width/(cols + 2);
     cellHeight = width/(rows + 2);
   }
-  translate(width/2 - cellWidth*((rows/2) + 2),height/2 - cellHeight*(cols/2));
+  translate(cellWidth,cellHeight);
   noFill();
   rect(0,0,cellWidth*rows, cellHeight*cols);
   displaySpaces();
@@ -108,13 +113,13 @@ function windowResized() {
 }
 
 function displayHard(){
-  rect(rows*cellWidth + cellWidth, height/4, cellWidth,cellHeight/2, 10);
+  image(hardButton, rows*cellWidth, height/4, cellWidth, cellHeight/2);
 }
 function displayMedium(){
-  rect(rows*cellWidth + cellWidth, height/4 + cellHeight, cellWidth,cellHeight/2, 10);
+  image(mediumButton, rows*cellWidth, height/4 + cellHeight, cellWidth, cellHeight/2);
 }
 function displayEasy(){
-  rect(rows*cellWidth + cellWidth, height/4 + cellHeight*2, cellWidth,cellHeight/2, 10);
+  image(easyButton, rows*cellWidth, height/4 + cellHeight*2, cellWidth, cellHeight/2);
 }
 
 function displaySpace(x,y){
@@ -286,10 +291,10 @@ function displaySpaces(){
 
 function mousePressed() {
   click.play();
-  let x = Math.floor(mouseX / cellWidth);
+  let x = (Math.floor(mouseX / cellWidth)) - 1;
   let y = (Math.floor(mouseY / cellHeight)) - 1;
-    if (x < cellWidth * rows && x >= 0 && y < cellHeight * cols && y >= 0){
-    console.log(x,y);
+  console.log(x,mouseX, y, mouseY);
+  if (x <  rows && x >= 0 && y < cols && y >= 0){
     if (firstMove){
       firstMove = false;
       nextMoveX = x;
@@ -302,6 +307,73 @@ function mousePressed() {
       nextStep(x,y);
     }
     displaySpace(x,y);
+  }
+  // hard button
+  else if (mouseX >= rows*cellWidth + cellWidth && mouseX <= rows*cellWidth + (cellWidth*2) && mouseY >= height/4 + cellHeight && mouseY <= height/4 + cellHeight + (cellHeight/2)){
+    mode = "hard";
+    spaces = [[1,2,1,2,3,3],
+              [2,1,2,2,1,2],
+              [2,4,1,3,2,1],
+              [2,1,3,2,2,1],
+              [2,3,1,3,2,1],
+              [5,3,1,1,4,2]];
+
+    direction = [[2,3,2,2,3,3],
+                [3,2,4,3,4,4],
+                [1,2,2,4,4,1],
+                [3,3,1,4,4,3],
+                [2,1,3,4,1,4],
+                [2,2,4,1,1,4]];
+
+    theColor = [[0,0,0,0,0,0],
+                [0,0,0,0,0,0],
+                [0,0,0,0,0,0],
+                [0,0,0,0,0,0],
+                [0,0,0,0,0,0],
+                [0,0,0,0,0,0]];
+    firstMove = true;
+    setup();
+  }
+  // medium button
+  else if (mouseX >= rows*cellWidth + cellWidth && mouseX <= rows*cellWidth + (cellWidth*2) && mouseY >= height/4 + cellHeight*2 && mouseY <= height/4 + cellHeight*2 + (cellHeight/2)){
+    mode = "medium";
+    spaces = [[3,1,1,2,4],
+              [3,3,1,2,4],
+              [1,2,2,2,2],
+              [2,2,2,1,2],
+              [2,1,4,3,1]];
+
+    direction = [[3,4,2,3,3],
+                [2,3,3,4,4],
+                [2,1,2,3,1],
+                [2,2,1,1,1],
+                [1,2,1,4,1]];
+
+    theColor = [[0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0],
+                [0,0,0,0,0]];
+    firstMove = true;
+    setup();
+  }
+  else if (mouseX >= rows*cellWidth + cellWidth && mouseX <= rows*cellWidth + (cellWidth*2) && mouseY >= height/4 + (cellHeight*3) && mouseY <= height/4 + (cellHeight*3) + (cellHeight/2)){
+    spaces = [[1,3,2,1],
+              [3,1,1,2],
+              [2,2,2,1],
+              [2,1,2,3]];
+
+    direction = [[2,3,4,4],
+                [2,3,3,4],
+                [1,2,4,3],
+                [1,2,4,1]];
+
+    theColor = [[0,0,0,0],
+                [0,0,0,0],
+                [0,0,0,0],
+                [0,0,0,0]];
+    firstMove = true;
+    setup();
   }
   console.log(nextMoveX, nextMoveY);
 }
