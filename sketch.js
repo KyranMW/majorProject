@@ -1,8 +1,8 @@
 // arrow grid game
 // Kyran Mcknight-Woods
 // CompSci 30
-// 2D Grid project
-// inspiration from Lock Puzzle
+// major project
+// inspiration from Lock Puzzle box
 
 // determines how many spaces between the clicked arrow and the next arrow
 let spaces = 
