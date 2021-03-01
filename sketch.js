@@ -47,6 +47,7 @@ let bg;
 
 let click;
 
+
 let mode = "hard";
 
 let firstMove = true;
@@ -292,8 +293,7 @@ function displaySpaces(){
 function mousePressed() {
   click.play();
   let x = (Math.floor(mouseX / cellWidth)) - 1;
-  let y = (Math.floor(mouseY / cellHeight)) - 1;
-  console.log(x,mouseX, y, mouseY);
+  let y = (Math.floor(mouseY / cellHeight)) - 1
   if (x <  rows && x >= 0 && y < cols && y >= 0){
     if (firstMove){
       firstMove = false;
@@ -375,7 +375,6 @@ function mousePressed() {
     firstMove = true;
     setup();
   }
-  console.log(nextMoveX, nextMoveY);
 }
 
 // determines next move
